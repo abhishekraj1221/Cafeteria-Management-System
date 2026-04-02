@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+            flex-direction: column;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: #007bff;
+            color: white;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        #otp-section {
+            display: none;
+        }
+    </style>
+    <script>
+        let generatedOTP = ""; // Store OTP for verification
+
+        async function sendOTP(event) {
+            event.preventDefault();
+
+            const name = document.getElementById("name").value;
+            const userEmail = document.getElementById("email").value;
+
+            // Generate a 6-digit OTP
+            generatedOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            
+            let emailBody = `
+                <h2>OTP Verification</h2>
+                <p>Hello ${name},</p>
+                <p>Your OTP for verification is: <strong>${generatedOTP}</strong></p>
+                <p>Do not share this OTP with anyone.</p>
+            `;
+
+            try {
+                const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Accept": "application/json"
+                        // TODO: Add api-key header here or move email sending to backend
+                        // For security, handle email sending on the server side
+                    },
+                    body: JSON.stringify({
+                        sender: { email: "prashantkamble4208@gmail.com", name: "Cafeteria " },
+                        to: [{ email: userEmail }],
+                        subject: "Your OTP Code",
+                        htmlContent: emailBody
+                    })
+                });
+                
+                if (response.ok) {
+                    alert("OTP sent to your email " + userEmail);
+                    document.getElementById("otp-section").style.display = "block";
+                    document.getElementById("send-otp-section").style.display = "none";
+                } else {
+                    alert("Failed to send OTP. Please try again.");
+                }
+            } catch (error) {
+                alert("Error sending OTP: " + error);
+            }
+        }
+
+        function verifyOTP(event) {
+            event.preventDefault();
+            const otpInput = document.getElementById("otp").value;
+
+            if (otpInput === generatedOTP) {
+                alert("Email Verified Successfully!");
+                window.location.href = "payment.html";
+            } else {
+                alert("Invalid OTP. Please try again.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>OTP Verification</h2>
+
+        <div id="send-otp-section">
+            <form onsubmit="sendOTP(event)">
+                <input type="text" id="name" placeholder="Enter Your Name" required>
+                <input type="email" id="email" placeholder="Enter Email Address" required>
+                <button type="submit">Send OTP</button>
+            </form>
+        </div>
+        
+        <div id="otp-section">
+            <h2>Verify OTP</h2>
+            <form onsubmit="verifyOTP(event)">
+                <input type="text" id="otp" placeholder="Enter OTP" required>
+                <button type="submit">Verify OTP</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

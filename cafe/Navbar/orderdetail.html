@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Order Details</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #6D5BBA;
+      --secondary-color: #FF6B6B;
+      --accent-color: #4ECDC4;
+      --success-color: #28a745;
+      --background-color: #f8f9fa;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #ddd;
+      --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    body {
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      font-family: 'Poppins', sans-serif;
+      text-align: center;
+      color: var(--text-color);
+      line-height: 1.6;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 10px;
+      font-size: 3rem;
+      font-weight: 700;
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      font-size: 1.8rem;
+      font-weight: 600;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .order-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 20px;
+      box-shadow: var(--shadow-md);
+      padding: 2.5rem;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    table {
+      width: 100%;
+      margin: 20px auto;
+      border-collapse: collapse;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background: var(--gradient-1);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-size: 0.9rem;
+    }
+
+    tr:hover {
+      background-color: rgba(42, 157, 143, 0.05);
+      transition: background-color 0.3s ease;
+    }
+
+    .total-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(109, 91, 186, 0.1), rgba(118, 75, 162, 0.1));
+      border-radius: 15px;
+      border: 2px solid rgba(109, 91, 186, 0.2);
+    }
+
+    .total-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      background: var(--gradient-1);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .clear-cart {
+      background: var(--gradient-2);
+      color: white;
+    }
+
+    .clear-cart:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .checkout {
+      background: var(--gradient-1);
+      color: white;
+      font-size: 16px;
+    }
+
+    .checkout:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .place-order {
+      width: 100%;
+      background: var(--gradient-1);
+      color: white;
+      padding: 1rem;
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 20px;
+      position: sticky;
+      bottom: 0;
+      z-index: 10;
+      box-shadow: var(--shadow-md);
+      border-radius: 12px;
+    }
+
+    .place-order:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    /* Payment Methods Styles */
+    .payment-methods {
+      display: grid;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .payment-option {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.25rem;
+      background: white;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .payment-option:hover {
+      border-color: var(--primary-color);
+      background: linear-gradient(135deg, rgba(109, 91, 186, 0.05), rgba(118, 75, 162, 0.05));
+      transform: translateX(5px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .payment-icon {
+      width: 50px;
+      height: 50px;
+      background: var(--gradient-1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.5rem;
+    }
+
+    .payment-icon.phonepe {
+      background: linear-gradient(135deg, #5f259f, #7c3aed);
+    }
+
+    .payment-icon.googlepay {
+      background: linear-gradient(135deg, #4285f4, #34a853);
+    }
+
+    .payment-icon.card {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+    }
+
+    .payment-info {
+      flex: 1;
+      text-align: left;
+    }
+
+    .payment-info h4 {
+      margin: 0 0 0.25rem 0;
+      color: var(--text-color);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .payment-info p {
+      margin: 0;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .payment-option i.fa-chevron-right {
+      color: var(--primary-color);
+      font-size: 1.2rem;
+    }
+
+    .back-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: #f0f0f0;
+      color: var(--text-color);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .back-btn:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    /* Table Selection Styles */
+    .table-card {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .table-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .table-card.available {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .table-card.available:hover {
+      background: linear-gradient(135deg, #c3e6cb, #b1dfbb);
+      border-color: #218838;
+    }
+
+    .table-card.selected {
+      background: linear-gradient(135deg, #6D5BBA, #764ba2);
+      border-color: #6D5BBA;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(109, 91, 186, 0.4);
+    }
+
+    .table-card.occupied {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .table-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .table-capacity {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* Table Selection Styles */
+    .table-card {
+      background: #f8f9fa;
+      border: 2px solid #dee2e6;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .table-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .table-card.available {
+      background: linear-gradient(135deg, #d4edda, #c3e6cb);
+      border-color: #28a745;
+      color: #155724;
+    }
+
+    .table-card.available:hover {
+      background: linear-gradient(135deg, #c3e6cb, #b1dfbb);
+      border-color: #218838;
+    }
+
+    .table-card.selected {
+      background: linear-gradient(135deg, #6D5BBA, #764ba2);
+      border-color: #6D5BBA;
+      color: white;
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(109, 91, 186, 0.4);
+    }
+
+    .table-card.occupied {
+      background: #f8d7da;
+      border-color: #dc3545;
+      color: #721c24;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    .table-number {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .table-capacity {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.3s ease;
+    }
+
+    .modal-content {
+      background-color: white;
+      margin: 5% auto;
+      padding: 30px;
+      border-radius: 10px;
+      width: 80%;
+      max-width: 800px;
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      animation: slideUp 0.5s ease-out;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      color: #aaa;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .close:hover {
+      color: #e74c3c;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: var(--text-color);
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      font-size: 16px;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 5px rgba(42, 157, 143, 0.3);
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .quantity-btn {
+      background-color: var(--primary-color);
+      color: white;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .quantity-btn:hover {
+      background-color: #238b7f;
+    }
+
+    .remove-btn {
+      background-color: #e74c3c;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 14px;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 40px;
+      color: #777;
+    }
+
+    .empty-cart i {
+      font-size: 4rem;
+      color: #ddd;
+      margin-bottom: 20px;
+    }
+
+    .loading-spinner {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .loading-spinner i {
+      font-size: 2rem;
+      color: var(--primary-color);
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .modal-content {
+        width: 95%;
+        margin: 10% auto;
+      }
+      
+      table {
+        font-size: 14px;
+      }
+      
+      th, td {
+        padding: 10px 5px;
+      }
+      
+      .button-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Order Details</h1>
+  <h2>Review Your Order</h2>
+
+  <div class="order-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Item</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Total</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="checkout-body">
+        <!-- Cart items will be loaded here -->
+      </tbody>
+    </table>
+
+    <div id="empty-cart-message" class="empty-cart" style="display: none;">
+      <i class="fas fa-shopping-cart"></i>
+      <h3>Your cart is empty</h3>
+      <p>Add some delicious items to your order!</p>
+    </div>
+
+    <div class="total-section">
+      <span>Grand Total:</span>
+      <span class="total-amount">₹<span id="cart-total">0</span></span>
+    </div>
+
+    <div class="button-group">
+      <button class="clear-cart" onclick="clearCart()">
+        <i class="fas fa-trash"></i> Clear Cart
+      </button>
+      <button class="checkout" onclick="openCheckout()">
+        <i class="fas fa-check-circle"></i> Place Order
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="checkoutModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeCheckout()">&times;</span>
+      <h2>Complete Your Order</h2>
+      
+      <div class="loading-spinner" id="orderLoadingSpinner">
+        <i class="fas fa-spinner"></i>
+        <p>Processing your order...</p>
+      </div>
+      
+      <div id="orderSummary">
+        <table>
+          <thead>
+            <tr>
+              <th>Item</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody id="modal-cart-body">
+            <!-- Cart items will be loaded here -->
+          </tbody>
+        </table>
+        
+        <div class="total-section">
+          <span>Final Total:</span>
+          <span class="total-amount">₹<span id="checkout-total">0</span></span>
+        </div>
+
+        <!-- User Inputs -->
+        <div class="form-group">
+          <label for="customer-name">Your Name</label>
+          <input type="text" id="customer-name" placeholder="Enter your name" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="customer-mobile">Mobile Number</label>
+          <input type="tel" id="customer-mobile" placeholder="Enter your mobile number" required>
+        </div>
+        
+        <div class="form-group">
+          <label for="table-selection">Select Your Table</label>
+          <div id="table-selection-container" style="margin-top: 10px;">
+            <div style="text-align: center; margin-bottom: 15px;">
+              <button type="button" onclick="loadAvailableTables()" style="padding: 8px 15px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer;">
+                <i class="fas fa-sync-alt"></i> Refresh Tables
+              </button>
+            </div>
+            <div id="available-tables-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; max-height: 300px; overflow-y: auto; padding: 10px; border: 2px dashed #ddd; border-radius: 8px;">
+              <div style="text-align: center; color: #999; padding: 20px;">
+                <i class="fas fa-spinner fa-spin"></i><br>
+                Loading available tables...
+              </div>
+            </div>
+            <input type="hidden" id="table-number-input" required>
+            <div id="selected-table-display" style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-radius: 5px; display: none;">
+              <strong>Selected Table: <span id="selected-table-number"></span></strong>
+            </div>
+          </div>
+        </div>
+
+        <button class="place-order" onclick="proceedToPayment(event)">
+          <i class="fas fa-credit-card"></i> Proceed to Payment
+        </button>
+      </div>
+
+      <!-- Payment Options Section -->
+      <div id="paymentSection" style="display: none;">
+        <h3 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary-color);">
+          <i class="fas fa-wallet"></i> Choose Payment Method
+        </h3>
+        
+        <div class="payment-methods">
+          <div class="payment-option" onclick="initiatePayment('upi')">
+            <div class="payment-icon">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="payment-info">
+              <h4>UPI</h4>
+              <p>Pay via UPI apps</p>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </div>
+
+          <div class="payment-option" onclick="initiatePayment('phonepe')">
+            <div class="payment-icon phonepe">
+              <i class="fas fa-mobile-alt"></i>
+            </div>
+            <div class="payment-info">
+              <h4>PhonePe</h4>
+              <p>Pay with PhonePe</p>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </div>
+
+          <div class="payment-option" onclick="initiatePayment('googlepay')">
+            <div class="payment-icon googlepay">
+              <i class="fab fa-google-pay"></i>
+            </div>
+            <div class="payment-info">
+              <h4>Google Pay</h4>
+              <p>Pay with Google Pay</p>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </div>
+
+          <div class="payment-option" onclick="initiatePayment('card')">
+            <div class="payment-icon card">
+              <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="payment-info">
+              <h4>Card / Net Banking</h4>
+              <p>Debit/Credit Card or Net Banking</p>
+            </div>
+            <i class="fas fa-chevron-right"></i>
+          </div>
+        </div>
+
+        <button class="back-btn" onclick="goBackToOrder()" style="margin-top: 1.5rem;">
+          <i class="fas fa-arrow-left"></i> Back to Order Details
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <script>
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+    let orderData = {}; // Store order details before payment
+    loadCartDetails();
+
+    function loadCartDetails() {
+      let cartBody = document.getElementById("checkout-body");
+      let cartTotal = document.getElementById("cart-total");
+      let emptyCartMessage = document.getElementById("empty-cart-message");
+      
+      cartBody.innerHTML = "";
+      let totalAmount = 0;
+
+      if (cart.length === 0) {
+        emptyCartMessage.style.display = "block";
+        return;
+      } else {
+        emptyCartMessage.style.display = "none";
+      }
+
+      cart.forEach((item, index) => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>₹${item.price}</td>
+          <td>
+            <div class="quantity-control">
+              <div class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</div>
+              <span>${item.quantity}</span>
+              <div class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</div>
+            </div>
+          </td>
+          <td>₹${item.price * item.quantity}</td>
+          <td>
+            <button class="remove-btn" onclick="removeFromCart(${index})">
+              <i class="fas fa-times"></i>
+            </button>
+          </td>
+        `;
+        cartBody.appendChild(row);
+        totalAmount += item.price * item.quantity;
+      });
+
+      cartTotal.textContent = totalAmount;
+    }
+
+    function updateQuantity(index, change) {
+      if (cart[index].quantity + change > 0) {
+        cart[index].quantity += change;
+      } else {
+        cart.splice(index, 1);
+      }
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCartDetails();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      loadCartDetails();
+    }
+
+    function clearCart() {
+      if (cart.length === 0) {
+        alert("Your cart is already empty!");
+        return;
+      }
+      
+      if (confirm("Are you sure you want to clear your cart?")) {
+        cart = [];
+        localStorage.setItem("cart", JSON.stringify(cart));
+        loadCartDetails();
+      }
+    }
+
+    let selectedTableNumber = null;
+
+    // Load available tables
+    function loadAvailableTables() {
+      const tablesContainer = document.getElementById("available-tables-grid");
+      tablesContainer.innerHTML = '<div style="text-align: center; color: #999; padding: 20px;"><i class="fas fa-spinner fa-spin"></i><br>Loading available tables...</div>';
+      
+      fetch("http://localhost:5000/get-available-tables", {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      })
+        .then(async res => {
+          // Check if response is actually JSON
+          const contentType = res.headers.get("content-type");
+          if (!contentType || !contentType.includes("application/json")) {
+            const text = await res.text();
+            throw new Error(`Server returned HTML instead of JSON. Status: ${res.status}. Response: ${text.substring(0, 200)}`);
+          }
+          
+          if (!res.ok) {
+            const errorData = await res.json().catch(() => ({ error: `HTTP error! status: ${res.status}` }));
+            throw new Error(errorData.error || `HTTP error! status: ${res.status}`);
+          }
+          return res.json();
+        })
+        .then(tables => {
+          // Check if tables is an array
+          if (!Array.isArray(tables)) {
+            throw new Error("Invalid response format from server");
+          }
+          
+          if (tables.length === 0) {
+            tablesContainer.innerHTML = '<div style="text-align: center; color: #dc3545; padding: 20px;"><i class="fas fa-exclamation-triangle"></i><br>No tables available at the moment. Please check back later.</div>';
+            return;
+          }
+          
+          tablesContainer.innerHTML = "";
+          tables.forEach(table => {
+            const tableCard = document.createElement("div");
+            tableCard.className = "table-card available";
+            tableCard.onclick = () => selectTable(table.table_number);
+            tableCard.innerHTML = `
+              <div class="table-number">${table.table_number}</div>
+              <div class="table-capacity"><i class="fas fa-users"></i> ${table.capacity} seats</div>
+            `;
+            tablesContainer.appendChild(tableCard);
+          });
+        })
+        .catch(err => {
+          console.error("Error loading tables:", err);
+          let errorMessage = "Error loading tables. ";
+          if (err.message.includes("Failed to fetch")) {
+            errorMessage += "Could not connect to server. Make sure the server is running on port 5000.";
+          } else {
+            errorMessage += err.message;
+          }
+          tablesContainer.innerHTML = `<div style="text-align: center; color: #dc3545; padding: 20px;"><i class="fas fa-exclamation-circle"></i><br>${errorMessage}<br><small style="color: #999;">Check browser console for details</small></div>`;
+        });
+    }
+
+    // Select a table
+    function selectTable(tableNumber) {
+      selectedTableNumber = tableNumber;
+      document.getElementById("table-number-input").value = tableNumber;
+      
+      // Update UI
+      const selectedDisplay = document.getElementById("selected-table-display");
+      const selectedTableSpan = document.getElementById("selected-table-number");
+      selectedDisplay.style.display = "block";
+      selectedTableSpan.textContent = tableNumber;
+      
+      // Update table cards
+      const tableCards = document.querySelectorAll(".table-card");
+      tableCards.forEach(card => {
+        card.classList.remove("selected");
+        const cardNumber = parseInt(card.querySelector(".table-number").textContent);
+        if (cardNumber === tableNumber) {
+          card.classList.add("selected");
+        }
+      });
+    }
+
+    function openCheckout() {
+      if (cart.length === 0) {
+        alert("Your cart is empty! Please add items before placing an order.");
+        return;
+      }
+      
+      let checkoutModal = document.getElementById("checkoutModal");
+      let modalCartBody = document.getElementById("modal-cart-body");
+      let checkoutTotal = document.getElementById("checkout-total");
+      let orderSummary = document.getElementById("orderSummary");
+      let orderLoadingSpinner = document.getElementById("orderLoadingSpinner");
+      
+      modalCartBody.innerHTML = "";
+      let totalAmount = 0;
+
+      cart.forEach(item => {
+        let row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${item.name}</td>
+          <td>₹${item.price}</td>
+          <td>${item.quantity}</td>
+          <td>₹${item.price * item.quantity}</td>
+        `;
+        modalCartBody.appendChild(row);
+        totalAmount += item.price * item.quantity;
+      });
+
+      checkoutTotal.textContent = totalAmount;
+      
+      // Reset form fields
+      document.getElementById("customer-name").value = "";
+      document.getElementById("customer-mobile").value = "";
+      document.getElementById("table-number-input").value = "";
+      selectedTableNumber = null;
+      document.getElementById("selected-table-display").style.display = "none";
+      
+      // Load available tables
+      loadAvailableTables();
+      
+      // Show modal with animation
+      checkoutModal.style.display = "block";
+      orderSummary.style.display = "block";
+      orderLoadingSpinner.style.display = "none";
+    }
+
+    function closeCheckout() {
+      document.getElementById("checkoutModal").style.display = "none";
+    }
+
+    // Store order data and show payment options
+    function proceedToPayment(event) {
+      event.preventDefault();
+
+      const customer_name = document.getElementById("customer-name").value.trim();
+      const phone = document.getElementById("customer-mobile").value.trim();
+      const table_number = selectedTableNumber || parseInt(document.getElementById("table-number-input").value.trim());
+      const final_total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      if (!customer_name || !phone || !table_number) {
+        alert("Please fill in all the fields and select a table.");
+        return;
+      }
+
+      // Store order data for later use
+      orderData = {
+        customer_name,
+        phone,
+        table_number,
+        final_total,
+        cart: [...cart]
+      };
+
+      // Hide order summary and show payment options
+      document.getElementById("orderSummary").style.display = "none";
+      document.getElementById("paymentSection").style.display = "block";
+    }
+
+    function goBackToOrder() {
+      document.getElementById("paymentSection").style.display = "none";
+      document.getElementById("orderSummary").style.display = "block";
+    }
+
+    // Initialize payment based on selected method
+    async function initiatePayment(method) {
+      const final_total = orderData.final_total;
+      
+      if (!final_total || final_total <= 0) {
+        alert("Invalid order amount!");
+        return;
+      }
+
+      // Show loading
+      document.getElementById("orderLoadingSpinner").style.display = "block";
+      document.getElementById("paymentSection").style.display = "none";
+
+      try {
+        // Create Razorpay order
+        const response = await fetch("http://localhost:5000/create-payment-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            amount: final_total, 
+            currency: "INR" 
+          })
+        });
+
+        const razorpayOrder = await response.json();
+
+        if (!razorpayOrder.success) {
+          throw new Error("Failed to create payment order");
+        }
+
+        // Razorpay options
+        const options = {
+          key: "rzp_test_2aZZ79f8hPihwb",
+          amount: razorpayOrder.amount,
+          currency: razorpayOrder.currency,
+          name: "Cafe Delight",
+          description: `Order Payment - Table ${orderData.table_number}`,
+          order_id: razorpayOrder.order_id,
+          handler: async function(response) {
+            // Payment successful - verify and place order
+            await handlePaymentSuccess(response);
+          },
+          prefill: {
+            name: orderData.customer_name,
+            contact: orderData.phone,
+            email: ""
+          },
+          notes: {
+            table_number: orderData.table_number.toString(),
+            customer_name: orderData.customer_name
+          },
+          theme: {
+            color: "#6D5BBA"
+          },
+          method: {
+            upi: method === 'upi' || method === 'phonepe' || method === 'googlepay',
+            card: method === 'card',
+            netbanking: method === 'card'
+          }
+        };
+
+        // Open Razorpay checkout
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', function(response) {
+          handlePaymentFailure(response);
+        });
+        
+        rzp.open();
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+
+      } catch (error) {
+        console.error("Payment error:", error);
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+        document.getElementById("paymentSection").style.display = "block";
+        alert("Failed to initialize payment. Please try again.");
+      }
+    }
+
+    // Handle successful payment
+    async function handlePaymentSuccess(paymentResponse) {
+      document.getElementById("orderLoadingSpinner").style.display = "block";
+      document.getElementById("paymentSection").style.display = "none";
+
+      try {
+        // Verify payment with server
+        const verifyResponse = await fetch("http://localhost:5000/verify-payment", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature
+          })
+        });
+
+        const verifyData = await verifyResponse.json();
+
+        if (!verifyData.success) {
+          throw new Error("Payment verification failed");
+        }
+
+        // Payment verified - now place the order
+        const orderResponse = await fetch("http://localhost:5000/place-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            ...orderData,
+            payment_id: paymentResponse.razorpay_payment_id,
+            payment_status: "completed"
+          })
+        });
+
+        const orderResult = await orderResponse.json();
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+
+        if (orderResult.success) {
+          // Show success message
+          document.getElementById("orderSummary").innerHTML = `
+            <div style="text-align: center; padding: 30px;">
+              <i class="fas fa-check-circle" style="font-size: 4rem; color: #28a745;"></i>
+              <h2 style="color: #28a745; margin: 20px 0;">Payment & Order Successful!</h2>
+              <p style="font-size: 1.1rem; margin-bottom: 1rem;">Payment ID: ${paymentResponse.razorpay_payment_id}</p>
+              <p>Thank you for your order. Your food will be prepared shortly.</p>
+              <button class="place-order" onclick="closeCheckout(); clearCart();" style="margin-top: 20px;">
+                <i class="fas fa-home"></i> Return to Menu
+              </button>
+            </div>
+          `;
+          document.getElementById("orderSummary").style.display = "block";
+          
+          // Clear cart
+          clearCart();
+        } else {
+          throw new Error("Failed to place order");
+        }
+
+      } catch (error) {
+        console.error("Order placement error:", error);
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+        document.getElementById("orderSummary").innerHTML = `
+          <div style="text-align: center; padding: 30px;">
+            <i class="fas fa-exclamation-triangle" style="font-size: 4rem; color: #ffc107;"></i>
+            <h2 style="color: #ffc107; margin: 20px 0;">Payment Successful but Order Failed</h2>
+            <p>Your payment was successful, but we couldn't place your order. Please contact support.</p>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 1rem;">Payment ID: ${paymentResponse.razorpay_payment_id}</p>
+            <button class="place-order" onclick="closeCheckout()" style="margin-top: 20px;">
+              <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+          </div>
+        `;
+        document.getElementById("orderSummary").style.display = "block";
+      }
+    }
+
+    // Handle payment failure
+    function handlePaymentFailure(response) {
+      document.getElementById("orderLoadingSpinner").style.display = "none";
+      document.getElementById("paymentSection").style.display = "block";
+      
+      alert(`Payment failed: ${response.error.description || "Please try again"}`);
+    }
+
+    // Old placeOrder function - kept for reference but not used
+    function placeOrder(event) {
+      event.preventDefault();
+
+      fetch("http://localhost:5000/place-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          customer_name,
+          phone,
+          table_number,
+          final_total,
+          cart
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        // Hide loading spinner
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+        
+        if (data.success) {
+          // Show success message
+          document.getElementById("orderSummary").innerHTML = `
+            <div style="text-align: center; padding: 30px;">
+              <i class="fas fa-check-circle" style="font-size: 4rem; color: #2a9d8f;"></i>
+              <h2 style="color: #2a9d8f; margin: 20px 0;">Order Placed Successfully!</h2>
+              <p>Thank you for your order. Your food will be prepared shortly.</p>
+              <button class="place-order" onclick="closeCheckout(); clearCart();" style="margin-top: 20px;">
+                <i class="fas fa-home"></i> Return to Menu
+              </button>
+            </div>
+          `;
+          document.getElementById("orderSummary").style.display = "block";
+          
+          // Clear cart after successful order
+          clearCart();
+        } else {
+          // Show error message
+          document.getElementById("orderSummary").innerHTML = `
+            <div style="text-align: center; padding: 30px;">
+              <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e74c3c;"></i>
+              <h2 style="color: #e74c3c; margin: 20px 0;">Failed to Place Order</h2>
+              <p>${data.message || "Something went wrong. Please try again."}</p>
+              <button class="place-order" onclick="closeCheckout()" style="margin-top: 20px;">
+                <i class="fas fa-arrow-left"></i> Go Back
+              </button>
+            </div>
+          `;
+          document.getElementById("orderSummary").style.display = "block";
+        }
+      })
+      .catch(err => {
+        console.error("Order error:", err);
+        
+        // Hide loading spinner
+        document.getElementById("orderLoadingSpinner").style.display = "none";
+        
+        // Show error message
+        document.getElementById("orderSummary").innerHTML = `
+          <div style="text-align: center; padding: 30px;">
+            <i class="fas fa-exclamation-circle" style="font-size: 4rem; color: #e74c3c;"></i>
+            <h2 style="color: #e74c3c; margin: 20px 0;">Connection Error</h2>
+            <p>Could not connect to the server. Please check your connection and try again.</p>
+            <button class="place-order" onclick="closeCheckout()" style="margin-top: 20px;">
+              <i class="fas fa-arrow-left"></i> Go Back
+            </button>
+          </div>
+        `;
+        document.getElementById("orderSummary").style.display = "block";
+      });
+    }
+
+    // Close modal when clicking outside
+    window.onclick = function(event) {
+      let modal = document.getElementById("checkoutModal");
+      if (event.target == modal) {
+        closeCheckout();
+      }
+    }
+  </script>
+</body>
+</html>

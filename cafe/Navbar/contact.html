@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6D5BBA;
+            --secondary-color: #FF6B6B;
+            --text-color: #333;
+            --light-bg: #f8f9fa;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .contact-header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://source.unsplash.com/1600x900/?restaurant,interior') no-repeat center center/cover;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .contact-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+
+        .contact-header p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-in 0.3s;
+        }
+
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .contact-info {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .contact-info:hover {
+            transform: translateY(-10px);
+        }
+
+        .contact-info h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .info-item i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-right: 15px;
+            width: 30px;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 5px rgba(109, 91, 186, 0.3);
+        }
+
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+
+        .submit-btn:hover {
+            background-color: #5a4ba0;
+        }
+
+        .submit-btn:disabled {
+            background-color: #a8a8a8;
+            cursor: not-allowed;
+        }
+
+        .map-container {
+            margin-top: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-message {
+            display: none;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .error-message {
+            display: none;
+            background-color: #dc3545;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .loading-spinner {
+            display: none;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .loading-spinner i {
+            font-size: 2rem;
+            color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .debug-info {
+            display: none;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        @media (max-width: 768px) {
+            .contact-header h1 {
+                font-size: 2rem;
+            }
+            
+            .contact-header p {
+                font-size: 1rem;
+            }
+
+            .contact-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="contact-header">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you! Reach out to us for reservations, inquiries, or feedback.</p>
+    </div>
+
+    <div class="contact-container">
+        <div class="contact-info">
+            <h3>Get in Touch</h3>
+            <div class="info-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <h4>Our Location</h4>
+                    <p>1012 Restaurant Street<br>Food City,FC Road,Pune</p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-phone"></i>
+                <div>
+                    <h4>Call Us</h4>
+                    <p>+91 9860883426<br></p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-envelope"></i>
+                <div>
+                    <h4>Email Us</h4>
+                    <p>prashantkamble4208@gmail.com<br></p>
+                </div>
+            </div>
+            <div class="info-item">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <h4>Opening Hours</h4>
+                    <p>Monday - Friday: 9:00 AM - 10:00 PM<br>Saturday - Sunday: 10:00 AM - 11:00 PM</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-form">
+            <div id="successMessage" class="success-message">
+                Thank you for your message! We will get back to you soon.
+            </div>
+            <div id="errorMessage" class="error-message">
+                There was an error sending your message. Please try again.
+            </div>
+            <div id="loadingSpinner" class="loading-spinner">
+                <i class="fas fa-spinner"></i>
+                <p>Sending your message...</p>
+            </div>
+            <div id="debugInfo" class="debug-info"></div>
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Subject</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn" id="submitBtn">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.2155710122!2d-73.987844924164!3d40.757988971389!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25855c6480299%3A0x55194ec5a1ae072e!2sTimes%20Square!5e0!3m2!1sen!2sus!4v1712345678901!5m2!1sen!2sus" 
+            allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+
+    <script>
+        // Form submission handling
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value,
+                timestamp: new Date().toISOString()
+            };
+
+            // Show loading spinner and disable submit button
+            document.getElementById('loadingSpinner').style.display = 'block';
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+            document.getElementById('debugInfo').style.display = 'none';
+
+            // Log the data being sent (for debugging)
+            console.log('Sending data:', formData);
+
+            // Send data to backend
+            fetch('http://localhost:5000/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                // Log the response status (for debugging)
+                console.log('Response status:', response.status);
+                
+                // Check if response is JSON
+                const contentType = response.headers.get('content-type');
+                if (contentType && contentType.includes('application/json')) {
+                    return response.json();
+                } else {
+                    // If not JSON, get text and create a simple object
+                    return response.text().then(text => {
+                        console.log('Non-JSON response:', text);
+                        return { success: response.ok, message: text };
+                    });
+                }
+            })
+            .then(data => {
+                // Log the response data (for debugging)
+                console.log('Response data:', data);
+                
+                // Hide loading spinner and enable submit button
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                if (data.success) {
+                    // Show success message
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('errorMessage').style.display = 'none';
+                    
+                    // Reset form
+                    this.reset();
+                    
+                    // Hide success message after 5 seconds
+                    setTimeout(() => {
+                        document.getElementById('successMessage').style.display = 'none';
+                    }, 5000);
+                } else {
+                    // Show error message with details if available
+                    document.getElementById('errorMessage').textContent = data.message || 'There was an error sending your message. Please try again.';
+                    document.getElementById('errorMessage').style.display = 'block';
+                    document.getElementById('successMessage').style.display = 'none';
+                    
+                    // Show debug info
+                    document.getElementById('debugInfo').textContent = JSON.stringify(data, null, 2);
+                    document.getElementById('debugInfo').style.display = 'block';
+                    
+                    // Hide error message after 10 seconds
+                    setTimeout(() => {
+                        document.getElementById('errorMessage').style.display = 'none';
+                    }, 10000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                
+                // Hide loading spinner and enable submit button
+                document.getElementById('loadingSpinner').style.display = 'none';
+                document.getElementById('submitBtn').disabled = false;
+                
+                // Show error message with details
+                document.getElementById('errorMessage').textContent = 'Error: ' + error.message;
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('successMessage').style.display = 'none';
+                
+                // Show debug info
+                document.getElementById('debugInfo').textContent = error.stack || error.toString();
+                document.getElementById('debugInfo').style.display = 'block';
+                
+                // Hide error message after 10 seconds
+                setTimeout(() => {
+                    document.getElementById('errorMessage').style.display = 'none';
+                }, 10000);
+            });
+        });
+
+        // Add animation to contact info cards
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.contact-info, .contact-form').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html> 

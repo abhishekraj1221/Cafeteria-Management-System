@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Menu</title>
+    <style>
+        body {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url("../Asset/specialback.jpg");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            min-height: 100vh;
+            margin: 0;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: -1;
+        }
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+            background: rgba(211, 84, 0, 0.8);
+            padding: 15px 30px;
+            border-radius: 10px;
+            display: inline-block;
+            margin-top: 60px;
+            margin-bottom: 30px;
+        }
+        .menu-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+        .menu-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+            width: 300px;
+            text-align: left;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 25px rgba(0, 0, 0, 0.4);
+        }
+        .menu-item img {
+            width: 100%;
+            border-radius: 8px;
+        }
+        .price {
+            text-align: center;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .add-to-cart {
+            background-color: #27ae60;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .add-to-cart:hover {
+            background-color: #219150;
+        }
+        #cart-message {
+            color: #2ecc71;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+            background: rgba(46, 204, 113, 0.2);
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: 2px solid #2ecc71;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .back-button {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background-color: rgba(44, 62, 80, 0.9);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        .back-button:hover {
+            background-color: rgba(52, 73, 94, 0.95);
+            transform: scale(1.05);
+        }
+        .chef-special {
+            background-color: #fef9e7;
+            border: 2px dashed #f1c40f;
+            padding: 5px 10px;
+            border-radius: 5px;
+            display: inline-block;
+            margin-bottom: 10px;
+            color: #d35400;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <a href="../mainpg.html" class="back-button">← Back to Menu</a>
+    <h1>Chef's Special Menu</h1>
+    <p id="cart-message"></p>
+
+    <div class="menu-container">
+        <div class="menu-item">
+            <img src="../Asset/buttergarlic.png" alt="Lobster">
+            <h3>Butter Garlic Lobster</h3>
+            <p class="chef-special">Chef's Special</p>
+            <p>Fresh lobster tail grilled with garlic butter and herbs, served with lemon.</p>
+            <p class="price">₹1200</p>
+            <button class="add-to-cart" onclick="addToCart('Butter Garlic Lobster', 1200)">Add to Cart</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="../Asset/waguy.png" alt="Wagyu Steak">
+            <h3>Wagyu Beef Steak</h3>
+            <p class="chef-special">Chef's Special</p>
+            <p>Premium Japanese Wagyu beef grilled to perfection with truffle sauce.</p>
+            <p class="price">₹2500</p>
+            <button class="add-to-cart" onclick="addToCart('Wagyu Beef Steak', 2500)">Add to Cart</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="../Asset/truffle.png" alt="Risotto">
+            <h3>Truffle Mushroom Risotto</h3>
+            <p class="chef-special">Chef's Special</p>
+            <p>Creamy Arborio rice with wild mushrooms and black truffle shavings.</p>
+            <p class="price">₹450</p>
+            <button class="add-to-cart" onclick="addToCart('Truffle Mushroom Risotto', 450)">Add to Cart</button>
+        </div>
+
+        <div class="menu-item">
+            <img src="../Asset/signature.png" alt="Sushi Platter">
+            <h3>Signature Sushi Platter</h3>
+            <p class="chef-special">Chef's Special</p>
+            <p>Assortment of fresh sushi including tuna, salmon, and eel with wasabi.</p>
+            <p class="price">₹800</p>
+            <button class="add-to-cart" onclick="addToCart('Signature Sushi Platter', 800)">Add to Cart</button>
+        </div>
+    </div>
+
+    <script>
+        function addToCart(itemName, itemPrice) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let existingItem = cart.find(item => item.name === itemName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ name: itemName, price: itemPrice, quantity: 1 });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            let message = document.getElementById("cart-message");
+            message.textContent = itemName + " added successfully!";
+            message.style.display = "block";
+
+            setTimeout(() => {
+                message.style.display = "none";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

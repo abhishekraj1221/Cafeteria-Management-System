@@ -1,0 +1,32 @@
+<button id="payButton"> Proceed to Pay</button>
+<script src="payment.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById("payButton").addEventListener("click", async function () {
+    const response = await fetch("http://localhost:3000/create-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: 100, currency: "INR" }) // ₹100
+    });
+
+    const order = await response.json();
+
+    var options = {
+        "key": "rzp_test_2aZZ79f8hPihwb",
+        "amount": order.amount,
+        "currency": order.currency,
+        "name": "Cafeteria Management",
+        "description": "Order Payment",
+        "order_id": order.id,
+        "handler": function (response) {
+            alert("Payment Successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        "theme": {
+            "color": "#3399cc"
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+});
+</script>

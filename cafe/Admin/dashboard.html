@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Cafe Delight</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6D5BBA;
+            --secondary-color: #FF6B6B;
+            --accent-color: #4ECDC4;
+            --success-color: #28a745;
+            --warning-color: #ffc107;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.15);
+            --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Top Navigation Bar */
+        .top-nav {
+            background: white;
+            box-shadow: var(--shadow-sm);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .logo i {
+            font-size: 1.8rem;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .logout-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--gradient-2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Dashboard Container */
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-title .icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient-1);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .refresh-btn {
+            padding: 1rem 2rem;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .refresh-btn i {
+            transition: transform 0.3s ease;
+        }
+
+        .refresh-btn:hover i {
+            transform: rotate(180deg);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient-1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Orders Table */
+        .orders-section {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 15px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background: var(--gradient-1);
+            color: white;
+        }
+
+        th {
+            padding: 1.25rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        td {
+            padding: 1.25rem 1rem;
+            color: #555;
+        }
+
+        .order-id {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-completed {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .complete-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--success-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .complete-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .complete-btn:active {
+            transform: translateY(0);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: #999;
+        }
+
+        .no-orders i {
+            font-size: 4rem;
+            color: #ddd;
+            margin-bottom: 1rem;
+        }
+
+        .no-orders h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: #666;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(109, 91, 186, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .auth-error {
+            text-align: center;
+            padding: 4rem 2rem;
+            color: var(--secondary-color);
+        }
+
+        .auth-error i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .auth-error h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 1rem;
+            }
+
+            .header-title h1 {
+                font-size: 1.75rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .table-wrapper {
+                overflow-x: scroll;
+            }
+
+            th, td {
+                padding: 0.75rem 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-container">
+        <!-- Top Navigation -->
+        <nav class="top-nav">
+            <div class="nav-left">
+                <div class="logo">
+                    <i class="fas fa-utensils"></i>
+                    <span>Codies Cafe</span>
+                </div>
+            </div>
+            <div class="nav-right">
+                <div class="user-info" id="userInfo">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Admin</span>
+                </div>
+                <button class="logout-btn" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Dashboard Container -->
+        <div class="dashboard-container">
+            <!-- Dashboard Header -->
+            <div class="dashboard-header">
+                <div class="header-title">
+                    <div class="icon">
+                        <i class="fas fa-clipboard-list"></i>
+                    </div>
+                    <h1>Pending Orders</h1>
+                </div>
+                <button class="refresh-btn" onclick="fetchOrders()">
+                    <i class="fas fa-sync-alt" id="refreshIcon"></i>
+                    <span id="refreshText">Refresh Orders</span>
+                </button>
+            </div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="pendingCount">0</div>
+                    <div class="stat-label">Pending Orders</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-icon" style="background: var(--gradient-2);">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="completedCount">0</div>
+                    <div class="stat-label">Completed Today</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-header">
+                        <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" id="customersCount">0</div>
+                    <div class="stat-label">Active Customers</div>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="orders-section">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th><i class="fas fa-hashtag"></i> Order ID</th>
+                                <th><i class="fas fa-user"></i> Customer Name</th>
+                                <th><i class="fas fa-phone"></i> Mobile Number</th>
+                                <th><i class="fas fa-table"></i> Table Number</th>
+                                <th><i class="fas fa-list"></i> Order Details</th>
+                                <th><i class="fas fa-info-circle"></i> Status</th>
+                                <th><i class="fas fa-cog"></i> Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <tr>
+                                <td colspan="7" class="no-orders">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    <h3>Loading orders...</h3>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="unauthorized-container" style="display: none;">
+        <div class="auth-error">
+            <i class="fas fa-exclamation-triangle"></i>
+            <h2>Unauthorized Access</h2>
+            <p>You must be logged in to access the dashboard.</p>
+            <p>Redirecting to login page...</p>
+        </div>
+    </div>
+    
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            updateUserInfo();
+        });
+
+        function checkAuth() {
+            const session = JSON.parse(localStorage.getItem("adminSession"));
+            
+            if (!session || session.expiresAt <= Date.now()) {
+                document.getElementById('auth-container').style.display = 'none';
+                document.getElementById('unauthorized-container').style.display = 'block';
+                
+                setTimeout(function() {
+                    window.location.href = "admin_login.html";
+                }, 2000);
+                
+                return false;
+            }
+            
+            document.getElementById('auth-container').style.display = 'block';
+            document.getElementById('unauthorized-container').style.display = 'none';
+            
+            session.expiresAt = Date.now() + 5 * 60 * 60 * 1000;
+            localStorage.setItem("adminSession", JSON.stringify(session));
+            
+            return true;
+        }
+
+        function updateUserInfo() {
+            const session = JSON.parse(localStorage.getItem("adminSession"));
+            if (session) {
+                document.getElementById('userInfo').innerHTML = `
+                    <i class="fas fa-user-circle"></i>
+                    <span>${session.username}</span>
+                `;
+            }
+        }
+    
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem("adminSession");
+                window.location.href = "admin_login.html";
+            }
+        }
+    
+        function fetchOrders() {
+            if (!checkAuth()) {
+                return;
+            }
+            
+            const refreshIcon = document.getElementById('refreshIcon');
+            const refreshText = document.getElementById('refreshText');
+            refreshIcon.classList.add('fa-spin');
+            refreshText.textContent = 'Refreshing...';
+            
+            fetch("http://localhost:5000/get-orders")
+            .then(response => response.json())
+            .then(data => {
+                refreshIcon.classList.remove('fa-spin');
+                refreshText.textContent = 'Refresh Orders';
+                
+                const tbody = document.getElementById('ordersTableBody');
+                tbody.innerHTML = '';
+
+                if (data.length === 0) {
+                    tbody.innerHTML = `
+                        <tr>
+                            <td colspan="7" class="no-orders">
+                                <i class="fas fa-inbox"></i>
+                                <h3>No pending orders found</h3>
+                                <p>All orders have been completed!</p>
+                            </td>
+                        </tr>
+                    `;
+                    updateStats(0, 0, 0);
+                    return;
+                }
+
+                data.forEach((order, index) => {
+                    const row = document.createElement('tr');
+                    row.style.animationDelay = `${index * 0.1}s`;
+                    row.className = 'fade-in';
+                    
+                    const statusClass = order.status === 'Completed' ? 'status-completed' : 'status-pending';
+                    const statusText = order.status || 'Pending';
+                    
+                    row.innerHTML = `
+                        <td class="order-id">#${order.order_id}</td>
+                        <td><strong>${order.customer_name}</strong></td>
+                        <td>${order.phone}</td>
+                        <td><span style="background: #e3f2fd; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600;">Table ${order.table_number}</span></td>
+                        <td style="max-width: 300px; word-wrap: break-word;">${order.order_details}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <button class="complete-btn" onclick="completeOrder(${order.order_id})">
+                                <i class="fas fa-check"></i>
+                                <span>Complete</span>
+                            </button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+
+                updateStats(data.length, 0, data.length);
+            })
+            .catch(error => {
+                console.error('Error fetching orders:', error);
+                refreshIcon.classList.remove('fa-spin');
+                refreshText.textContent = 'Refresh Orders';
+                document.getElementById('ordersTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="7" class="no-orders">
+                            <i class="fas fa-exclamation-circle"></i>
+                            <h3>Error loading orders</h3>
+                            <p>Please check your connection and try again.</p>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        function updateStats(pending, completed, customers) {
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('completedCount').textContent = completed;
+            document.getElementById('customersCount').textContent = customers;
+        }
+   
+        // Initial fetch
+        fetchOrders();
+        
+        // Auto-refresh every 30 seconds
+        setInterval(fetchOrders, 30000);
+
+        function completeOrder(orderId) {
+            if (!checkAuth()) {
+                return;
+            }
+            
+            if (confirm(`Are you sure you want to mark Order #${orderId} as completed?`)) {
+                const btn = event.target.closest('.complete-btn');
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+                
+                fetch('http://localhost:5000/complete-order/' + orderId, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to complete order');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Show success notification
+                    showNotification('Order completed successfully!', 'success');
+                    
+                    // Remove row with animation
+                    const row = document.getElementById(`order-${orderId}`) || event.target.closest('tr');
+                    if (row) {
+                        row.style.transition = 'all 0.3s ease';
+                        row.style.opacity = '0';
+                        row.style.transform = 'translateX(-100px)';
+                        setTimeout(() => {
+                            row.remove();
+                            
+                            // Check if there are any orders left
+                            const tbody = document.getElementById('ordersTableBody');
+                            if (tbody.children.length === 0) {
+                                tbody.innerHTML = `
+                                    <tr>
+                                        <td colspan="7" class="no-orders">
+                                            <i class="fas fa-inbox"></i>
+                                            <h3>No pending orders found</h3>
+                                            <p>All orders have been completed!</p>
+                                        </td>
+                                    </tr>
+                                `;
+                            }
+                            
+                            // Update stats
+                            const remainingOrders = tbody.querySelectorAll('tr:not(.no-orders)').length;
+                            updateStats(remainingOrders, 0, remainingOrders);
+                        }, 300);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error completing order:', error);
+                    showNotification('Failed to complete order. Please try again.', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-check"></i> <span>Complete</span>';
+                });
+            }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+
+    <style>
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideOutRight {
+            from {
+                transform: translateX(0);
+                opacity: 1;
+            }
+            to {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.5s ease-out both;
+        }
+    </style>
+</body>
+</html>
